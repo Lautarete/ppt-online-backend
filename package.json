@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch ./src/index.ts --exec ts-node ./src/index.ts"
+    "dev": "nodemon --watch ./src/index.ts --exec ts-node ./src/index.ts",
+    "build": "pnpm exec tsc",
+    "deploy": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "typescript": "^7.0.2"
   }
 }
