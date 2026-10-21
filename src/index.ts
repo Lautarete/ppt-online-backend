@@ -201,7 +201,7 @@ function runAPI() {
 
   // GET PLAYERS
   server.get("/game/players", (request, response) => {
-    const { CUId } = request.body;
+    const { CUId } = request.query;
 
     const thisCurrentGameRef = firestore.doc("/rooms/" + CUId);
 
