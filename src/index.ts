@@ -199,6 +199,32 @@ function runAPI() {
     });
   });
 
+  // GET PLAYERS
+  server.get("/game/players", (request, response) => {
+    const { CUId } = request.body;
+
+    const thisCurrentGameRef = firestore.doc("/rooms/" + CUId);
+
+    thisCurrentGameRef.get().then((gameSnap) => {
+      if (!gameSnap.exists) {
+        return response.status(400).json({
+          error: "Room Id no existe",
+          CUId,
+        });
+      }
+
+      const gameData = gameSnap.data();
+
+      const entries = Object.entries(gameData?.history);
+      const players = [entries[0][0], entries[1][0]];
+
+      // response.status(200).json(players);
+      // console.log(gameData.hisor);
+
+      response.status(200).json(players);
+    });
+  });
+
   // SET READY TO PLAY
   server.patch("/game", (request, response) => {
     const { userName } = request.body;
