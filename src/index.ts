@@ -55,8 +55,8 @@ function runAPI() {
   });
 
   // GET ROOM ID
-  server.get("/room/:CUId", (request, response) => {
-    const { CUId } = request.params;
+  server.get("/room", (request, response) => {
+    const CUId = request.query.CUId as string;
 
     const thisFirestoreRoomRef = firestoreRoomsRef.doc(CUId);
     thisFirestoreRoomRef.get().then((roomSnap) => {
@@ -66,7 +66,7 @@ function runAPI() {
       } else {
         response.status(404).json({
           error: "Room no encontrada",
-          id: request.params.CUId,
+          id: CUId,
         });
       }
     });
@@ -222,6 +222,26 @@ function runAPI() {
       // console.log(gameData.hisor);
 
       response.status(200).json(players);
+    });
+  });
+
+  // GET HISTORY
+  server.get("/room/history", (request, response) => {
+    const { CUId } = request.query;
+
+    const thisCurrentGameRef = firestore.doc("/rooms/" + CUId);
+
+    thisCurrentGameRef.get().then((gameSnap) => {
+      if (!gameSnap.exists) {
+        return response.status(400).json({
+          error: "Room Id no existe",
+          CUId,
+        });
+      }
+
+      const gameData = gameSnap.data();
+
+      response.status(200).json(gameData!.history);
     });
   });
 
