@@ -245,6 +245,43 @@ function runAPI() {
     });
   });
 
+  // SET ONLINE
+  server.patch("/game/online", (request, response) => {
+    const { userName } = request.body;
+    const { roomId } = request.body;
+    const { isOnline } = request.query;
+
+    if (isOnline != "true" && isOnline != "false") {
+      return response.status(400).json({
+        error: "Query 'isOnline' tiene que ser 'true' o 'false'",
+        start: isOnline,
+      });
+    }
+
+    // queryStart es un string, con esto se vuelve boolean
+    const booleanIsOnline = isOnline === "true";
+    const currentPlayerRef = db.ref(
+      "/rooms/" + roomId + "/currentGame/" + userName,
+    );
+
+    currentPlayerRef.get().then((snap) => {
+      if (!snap.exists()) {
+        return response.status(404).json({
+          error: `Room ID o User Name no existen`,
+          roomId,
+          userName,
+        });
+      }
+
+      currentPlayerRef.update({
+        start: booleanIsOnline,
+      });
+      response.status(202).json({
+        succes: `Users ${userName} start seted to ${isOnline}`,
+      });
+    });
+  });
+
   // SET READY TO PLAY
   server.patch("/game", (request, response) => {
     const { userName } = request.body;
@@ -258,6 +295,7 @@ function runAPI() {
       });
     }
 
+    // queryStart es un string, con esto se vuelve boolean
     const booleanQueryStart = queryStart === "true";
     const currentPlayerRef = db.ref(
       "/rooms/" + roomId + "/currentGame/" + userName,
