@@ -274,10 +274,10 @@ function runAPI() {
       }
 
       currentPlayerRef.update({
-        start: booleanIsOnline,
+        online: booleanIsOnline,
       });
       response.status(202).json({
-        succes: `Users ${userName} start seted to ${isOnline}`,
+        succes: `Users ${userName} online seted to ${isOnline}`,
       });
     });
   });
