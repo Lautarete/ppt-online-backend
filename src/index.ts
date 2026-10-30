@@ -254,7 +254,7 @@ function runAPI() {
     if (isOnline != "true" && isOnline != "false") {
       return response.status(400).json({
         error: "Query 'isOnline' tiene que ser 'true' o 'false'",
-        start: isOnline,
+        online: isOnline,
       });
     }
 
